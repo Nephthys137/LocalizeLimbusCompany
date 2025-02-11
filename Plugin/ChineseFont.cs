@@ -393,7 +393,6 @@ public static class ChineseFont
     [HarmonyPostfix]
     private static void SetLoginInfo(LoginSceneManager __instance)
     {
-        if (!LLCMod.IncompatibleMod()) return;
         LoadLocal();
         __instance.tmp_loginAccount.text = "LimbusLocalizeMod v" + LLCMod.Version;
     }

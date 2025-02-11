@@ -112,11 +112,11 @@ public class Manager(IntPtr ptr) : MonoBehaviour(ptr)
                 FatalErrorlog = string.Empty;
             });
         }
-        if (File.Exists(Path.Combine(LLCMod.ModPath, "UPDATE_TEMP_INFO")))
+        else if (File.Exists(LLCMod.ModPath + "/UPDATE_TEMP_INFO"))
         {
-            string content = File.ReadAllText(Path.Combine(LLCMod.ModPath, "UPDATE_TEMP_INFO"));
+            var content = File.ReadAllText(LLCMod.ModPath + "/UPDATE_TEMP_INFO");
             OpenGlobalPopup(content, "模组更新完成", "忽略", "好的");
-            File.Delete(Path.Combine(LLCMod.ModPath, "UPDATE_TEMP_INFO"));
+            File.Delete(LLCMod.ModPath + "/UPDATE_TEMP_INFO");
         }
     }
 

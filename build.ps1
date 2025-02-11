@@ -7,14 +7,13 @@ if (Test-Path $Path)
 	Remove-Item -Path "$Path" -Recurse
 	}
 # ----------- BepinEx -----------
-dotnet build src/LimbusLocalize.sln -c BIE
-$BIE_LLC_Path = "$Path/LimbusLocalize/BepInEx/plugins/LLC"
+dotnet build LimbusLocalize.sln -c BIE
+$BIE_LLC_Path = "$Path/BepInEx/plugins/LLC"
 New-Item -Path "$BIE_LLC_Path" -Name "Localize" -ItemType "directory" -Force
 Copy-Item -Path Localize/CN $BIE_LLC_Path/Localize -Force -Recurse
 Copy-Item -Path Localize/Readme $BIE_LLC_Path/Localize -Force -Recurse
 if ($version)
 	{
-	 Set-Location "$Path/LimbusLocalize"
-	 7z a -t7z "../LimbusLocalize_BIE_$version.7z" "BepInEx/" -mx=9 -ms
-	 Set-Location "../../"
+	 Set-Location "$Path"
+	 7z a -t7z "./LimbusLocalize_BIE_$version.7z" "BepInEx/" -mx=9 -ms
 	}

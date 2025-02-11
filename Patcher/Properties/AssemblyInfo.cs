@@ -1,13 +1,13 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
-using LimbusLocalize;
+using LimbusLocalize_Updater;
 
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle(LLCMod.Name)]
-[assembly: AssemblyCompany(LLCMod.Author)]
-[assembly: AssemblyProduct(LLCMod.Name)]
+[assembly: AssemblyTitle(UpdaterPatcher.Name)]
+[assembly: AssemblyCompany(UpdaterPatcher.Author)]
+[assembly: AssemblyProduct(UpdaterPatcher.Name)]
 [assembly: AssemblyCopyright("Copyright ©  2023")]
 
 // 将 ComVisible 设置为 false 会使此程序集中的类型
@@ -16,7 +16,7 @@ using LimbusLocalize;
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
-[assembly: Guid("b8f92b29-0e76-4151-b668-3b545ab0de25")]
+[assembly: Guid("A1090C04-D243-4A74-A6F5-96A5699B80E4")]
 
 // 程序集的版本信息由下列四个值组成: 
 //
@@ -28,5 +28,5 @@ using LimbusLocalize;
 //可以指定所有这些值，也可以使用“生成号”和“修订号”的默认值
 //通过使用 "*"，如下所示:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion(LLCMod.Version)]
-[assembly: AssemblyFileVersion(LLCMod.Version)]
+[assembly: AssemblyVersion(UpdaterPatcher.VERSION)]
+[assembly: AssemblyFileVersion(UpdaterPatcher.VERSION)]

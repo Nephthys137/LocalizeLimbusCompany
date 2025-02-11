@@ -8,7 +8,7 @@ LimbusCompany I18N mod
 
 [![Download](https://img.shields.io/github/downloads/LocalizeLimbusCompany/LocalizeLimbusCompany/total.svg?label=Download)](../../../releases)
 [![Version](https://img.shields.io/github/release/LocalizeLimbusCompany/LocalizeLimbusCompany.svg?label=Version)](../../../releases/latest)
-[![Localize Limbus Chat Group](https://img.shields.io/badge/Join-QQ-Discord-blue?logo=tencent-qq)](https://pd.qq.com/s/gqpsr265g)
+[![Localize Limbus Chat Group](https://img.shields.io/badge/Join-QQ-Discord-blue?logo=tencent-qq)](https://pd.qq.com/s/fpzhrgdwo)
 
 [한국어](https://limbuscompany.kr) | ~~Deutsch~~ | [Español](https://github.com/Dreams-Office/LimbusCompanySpanishTranslationTeam) | [日本語](https://limbuscompany.kr) | [Français](https://github.com/Eden-Office/LimbusCompanyBusFR) | [简体中文](../../..)
 

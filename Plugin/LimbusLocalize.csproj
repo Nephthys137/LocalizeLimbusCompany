@@ -16,29 +16,14 @@
         <AssemblyName>$(MSBuildProjectName)_$(Configuration)</AssemblyName>
     </PropertyGroup>
 
-    <!-- ~~~~~ CONFIGURATIONS ~~~~~ -->
     <ItemGroup>
         <None Remove="Directory.Build.props"/>
         <None Remove="nuget.config"/>
-        <None Update="7z.exe">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
         <None Update="version.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="7z.dll">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
-
-    <!-- ~~~~~ NUGET ~~~~~ -->
-    <ItemGroup>
         <PackageReference Include="HarmonyX" Version="2.5.2" IncludeAssets="compile"/>
         <PackageReference Include="Il2CppInterop.Runtime" Version="1.0.0"/>
-    </ItemGroup>
-
-    <!-- ~~~~~ ASSEMBLY REFERENCES ~~~~~ -->
-    <ItemGroup>
         <Reference Include="Assembly-CSharp">
             <HintPath>..\lib\Assembly-CSharp.dll</HintPath>
         </Reference>

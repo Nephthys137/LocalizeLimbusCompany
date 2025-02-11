@@ -1,20 +1,27 @@
+using System;
+using System.IO;
+using System.Reflection;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using LimbusLocalize.LLC;
-using Microsoft.Win32;
-using System;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Reflection;
 using UnityEngine;
+
 namespace LimbusLocalize;
 
 [BepInPlugin(Guid, Name, Version)]
 public class LLCMod : BasePlugin
 {
+    public enum NodeType
+    {
+        Auto,
+        ZhenJiang,
+        GitHub,
+        OneDrive,
+        Tianyi
+    }
+
     public const string Guid = $"Com.{Author}.{Name}";
     public const string Name = "LocalizeLimbusCompany";
     public const string Version = "0.7.0";
@@ -72,7 +79,7 @@ public class LLCMod : BasePlugin
                 LogFatalError(
                     "You Not Have Chinese Font, Please Read GitHub Readme To Download\n你没有下载中文字体,请阅读GitHub的Readme下载",
                     OpenLLCUrl);
-            LogWarning("Startup" + DateTime.Now);
+            LogInfo("Startup " + DateTime.Now);
         }
         catch (Exception e)
         {
@@ -92,81 +99,11 @@ public class LLCMod : BasePlugin
         File.Copy(Application.consoleLogPath, GamePath + "/Player(游戏日志).log", true);
     }
 
-    public static bool IncompatibleMod()
-    {
-        try
-        {
-            //Check BepInEx mod
-            if (IL2CPPChainloader.Instance.Plugins.Keys.Any(guid => !guid.StartsWith("Com.Bright.")))
-                return OpenGlobalPopup("Invalid assemblies.\nUnable to run game.");
-            //Check visual mod
-            if (OperatingSystem.IsWindows())
-            {
-                var steamPath =
-                    Registry.GetValue(@"HKEY_CURRENT_USER\Software\Valve\Steam", "SteamPath", null) as string;
-                var userdata = long.Parse(LoginInfoManager.Instance.SteamID) - 76561197960265728;
-                var lines = File.ReadAllLines($"{steamPath}/userdata/{userdata}/config/localconfig.vdf");
-                var start = false;
-                var end = false;
-                var has = false;
-                foreach (var line in lines)
-                {
-                    if (!start)
-                    {
-                        if ("\t\t\t\t\t\"1973530\"".Equals(line))
-                            start = true;
-                        continue;
-                    }
-
-                    if (line.Contains("\"LastPlayed\""))
-                        if (!end)
-                            end = true;
-                        else
-                            break;
-                    var launchOptions = "\t\t\t\t\t\t\"LaunchOptions\"\t\t";
-                    if (!line.Contains(launchOptions)) continue;
-                    launchOptions = line[launchOptions.Length..];
-                    if (launchOptions.Contains("%command%"))
-                        has = true;
-                    break;
-                }
-
-                if (has) return OpenGlobalPopup("Invalid parameters.\nUnable to run game.");
-            }
-
-            //Check private server
-            var hostEntry = Dns.GetHostEntry("www.limbuscompanyapi.com");
-            var ip = hostEntry.AddressList[0].ToString();
-            if (ip.StartsWith("127.0.") || ip.StartsWith("192.168."))
-                return OpenGlobalPopup("Remote address loopback error.\nUnable to run game.");
-        }
-        catch (Exception e)
-        {
-            LogError("IncompatibleMod Error" + e);
-        }
-
-        return true;
-
-        bool OpenGlobalPopup(string description)
-        {
-            Action action = Application.Quit;
-            Manager.OpenGlobalPopup(description, null,
-                null, "OK", action, action);
-            return false;
-        }
-    }
     private static void InitUpdateConfig()
     {
         LLCSettings.Bind("LLC Settings", "TimeOuted", 10, "自动检查并下载更新的超时时间");
         LLCSettings.Bind("LLC Settings", "AutoUpdate", true, "是否自动检查并下载更新 ( true | false )");
-        LLCSettings.Bind("LLC Settings", "UpdateURI", NodeType.Auto, "自动更新所使用URI ( Auto：自动 | ZhenJiang：中国镇江服务器 | GitHub：GitHub | OneDrive：Onedrive For Business | Tianyi：天翼网盘 )");
-    }
-    public enum NodeType
-    {
-        Auto,
-        ZhenJiang,
-        GitHub,
-        OneDrive,
-        Tianyi
+        LLCSettings.Bind("LLC Settings", "UpdateURI", NodeType.Auto,
+            "自动更新所使用URI ( Auto：自动 | ZhenJiang：中国镇江服务器 | GitHub：GitHub | OneDrive：Onedrive For Business | Tianyi：天翼网盘 )");
     }
 }

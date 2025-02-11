@@ -149,13 +149,12 @@ public static class ReadmeManager
 
     #region 公告相关
 
+    private static readonly HttpClient Client = new();
+
     private static void ReadmeUpdate()
     {
         try
         {
-            HttpClient Client = new();
-            Client.Timeout = TimeSpan.FromSeconds(10);
-            Client.DefaultRequestHeaders.Add("User-Agent", "LLC-GameClient");
             var lastUpdateTimeText =
                 Client.GetStringAsync("https://api.zeroasso.top/v2/readme/get_latest_time").GetAwaiter().GetResult();
             var filePath = LLCMod.ModPath + "/Localize/Readme/Readme.json";
@@ -164,7 +163,7 @@ public static class ReadmeManager
                 return;
             File.WriteAllText(filePath,
                 Client.GetStringAsync("https://api.zeroasso.top/v2/readme/get_readme").GetAwaiter().GetResult());
-            ReadmeManager.InitReadmeList();
+            InitReadmeList();
         }
         catch (Exception ex)
         {
