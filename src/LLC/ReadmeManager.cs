@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using HarmonyLib;
 using Il2CppSystem.Collections.Generic;
 using LocalSave;
@@ -148,11 +149,34 @@ public static class ReadmeManager
 
     #region 公告相关
 
+    private static void ReadmeUpdate()
+    {
+        try
+        {
+            HttpClient Client = new();
+            Client.Timeout = TimeSpan.FromSeconds(10);
+            Client.DefaultRequestHeaders.Add("User-Agent", "LLC-GameClient");
+            var lastUpdateTimeText =
+                Client.GetStringAsync("https://api.zeroasso.top/v2/readme/get_latest_time").GetAwaiter().GetResult();
+            var filePath = LLCMod.ModPath + "/Localize/Readme/Readme.json";
+            var lastWriteTime = new FileInfo(filePath).LastWriteTime;
+            if (lastWriteTime >= DateTime.Parse(lastUpdateTimeText))
+                return;
+            File.WriteAllText(filePath,
+                Client.GetStringAsync("https://api.zeroasso.top/v2/readme/get_readme").GetAwaiter().GetResult());
+            ReadmeManager.InitReadmeList();
+        }
+        catch (Exception ex)
+        {
+            LLCMod.LogWarning($"Readme update failed:\n{ex}");
+        }
+    }
+
     [HarmonyPatch(typeof(UserLocalNoticeRedDotModel), nameof(UserLocalNoticeRedDotModel.InitNoticeList))]
     [HarmonyPrefix]
     private static bool InitNoticeList(UserLocalNoticeRedDotModel __instance, List<int> severNoticeList)
     {
-        UpdateChecker.ReadmeUpdate();
+        ReadmeUpdate();
         if (__instance.idList.RemoveAll((Func<int, bool>)Func) > 0)
             __instance.isChanged = true;
         __instance.Save();

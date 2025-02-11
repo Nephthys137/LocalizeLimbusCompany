@@ -103,33 +103,7 @@ public class Manager(IntPtr ptr) : MonoBehaviour(ptr)
     [HarmonyPostfix]
     public static void CheckModActions()
     {
-        if (UpdateChecker.NeedPopup)
-        {
-            if (UpdateChecker.IsAppOutdated)
-            {
-                OpenGlobalPopup(
-                    $"Has Update {UpdateChecker.UpdateMessage}!\nOpen Download Path & Quit Game\n模组程序存在更新\n点击OK将退出游戏并打开下载目录\n请将{UpdateChecker.UpdateMessage}压缩包解压至该目录",
-                    "Mod Has Update\n模组程序存在更新", "Cancel", "OK", () =>
-                    {
-                        LLCMod.OpenGamePath();
-                        Application.Quit();
-                    });
-                return;
-            }
-
-            var updateMessage = "您的模组已更新至最新版本！\n更新内容：";
-            if (!string.IsNullOrEmpty(UpdateChecker.ResourceUpdateVersion) &&
-                !string.IsNullOrEmpty(UpdateChecker.ResourceOldVersion))
-                updateMessage +=
-                    $"\n文本更新：v{UpdateChecker.ResourceOldVersion} => v{UpdateChecker.ResourceUpdateVersion}";
-            if (!string.IsNullOrEmpty(UpdateChecker.TMPUpdateVersion) &&
-                !string.IsNullOrEmpty(UpdateChecker.TMPOldVersion))
-                updateMessage += $"\n字体更新：v{UpdateChecker.TMPOldVersion} => v{UpdateChecker.TMPUpdateVersion}";
-            if (!string.IsNullOrEmpty(UpdateChecker.UpdateMessage))
-                updateMessage += "\n更新提示：\n" + UpdateChecker.UpdateMessage;
-            OpenGlobalPopup(updateMessage, "模组更新完成", null, "OK");
-        }
-        else if (FatalErrorAction != null)
+        if (FatalErrorAction != null)
         {
             OpenGlobalPopup(FatalErrorlog, "Mod Has Fatal Error!\n模组存在致命错误", null, "Open LLC URL", () =>
             {
@@ -137,6 +111,12 @@ public class Manager(IntPtr ptr) : MonoBehaviour(ptr)
                 FatalErrorAction = null;
                 FatalErrorlog = string.Empty;
             });
+        }
+        if (File.Exists(Path.Combine(LLCMod.ModPath, "UPDATE_TEMP_INFO")))
+        {
+            string content = File.ReadAllText(Path.Combine(LLCMod.ModPath, "UPDATE_TEMP_INFO"));
+            OpenGlobalPopup(content, "模组更新完成", "忽略", "好的");
+            File.Delete(Path.Combine(LLCMod.ModPath, "UPDATE_TEMP_INFO"));
         }
     }
 

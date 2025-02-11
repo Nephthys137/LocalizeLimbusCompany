@@ -1,16 +1,15 @@
-using System;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Reflection;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using LimbusLocalize.LLC;
 using Microsoft.Win32;
+using System;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Reflection;
 using UnityEngine;
-
 namespace LimbusLocalize;
 
 [BepInPlugin(Guid, Name, Version)]
@@ -55,7 +54,7 @@ public class LLCMod : BasePlugin
         };
         ModPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         GamePath = new DirectoryInfo(Application.dataPath).Parent!.FullName;
-        UpdateChecker.StartAutoUpdate();
+        InitUpdateConfig();
         try
         {
             if (ChineseSetting.IsUseChinese.Value)
@@ -155,5 +154,19 @@ public class LLCMod : BasePlugin
                 null, "OK", action, action);
             return false;
         }
+    }
+    private static void InitUpdateConfig()
+    {
+        LLCSettings.Bind("LLC Settings", "TimeOuted", 10, "自动检查并下载更新的超时时间");
+        LLCSettings.Bind("LLC Settings", "AutoUpdate", true, "是否自动检查并下载更新 ( true | false )");
+        LLCSettings.Bind("LLC Settings", "UpdateURI", NodeType.Auto, "自动更新所使用URI ( Auto：自动 | ZhenJiang：中国镇江服务器 | GitHub：GitHub | OneDrive：Onedrive For Business | Tianyi：天翼网盘 )");
+    }
+    public enum NodeType
+    {
+        Auto,
+        ZhenJiang,
+        GitHub,
+        OneDrive,
+        Tianyi
     }
 }
